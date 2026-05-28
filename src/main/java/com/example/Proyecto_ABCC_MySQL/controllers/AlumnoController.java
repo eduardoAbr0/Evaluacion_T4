@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.Proyecto_ABCC_MySQL.models.AlumnoModel;
 import com.example.Proyecto_ABCC_MySQL.services.AlumnoServiceImp;
@@ -32,9 +33,12 @@ public class AlumnoController {
     }
 
     @PostMapping("/saveAlumno")
-    public String saveEmployee(@ModelAttribute("alumno") AlumnoModel employee) {
+    public String saveEmployee(@ModelAttribute("alumno") AlumnoModel employee, RedirectAttributes redirectAttributes) {
         // save employee to database
         alumnoService.saveAlumno(employee);
+
+        redirectAttributes.addFlashAttribute("mensaje", "Alumno guardado con éxito");
+        redirectAttributes.addFlashAttribute("class", "alert alert-success");
         return "redirect:/";
     }
 
@@ -61,10 +65,13 @@ public class AlumnoController {
     }
 
     @GetMapping("/deleteAlumno/{id}")
-    public String deleteAlumno(@PathVariable(value = "id") long id) {
+    public String deleteAlumno(@PathVariable(value = "id") long id, RedirectAttributes redirectAttributes) {
 
         // call delete employee method 
         this.alumnoService.deleteAlumnoById(id);
+
+        redirectAttributes.addFlashAttribute("mensaje", "Alumno eliminado con éxito");
+        redirectAttributes.addFlashAttribute("class", "alert alert-danger");
         return "redirect:/";
     }
 }

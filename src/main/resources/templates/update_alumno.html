@@ -21,6 +21,8 @@
 
         <form action="#" th:action="@{/saveAlumno}" th:object="${alumno}" method="POST">
 
+            <input type="hidden" th:field="*{id}" />
+
             <div class="col-4 mb-4">
                 <label for="numControl" class="form-label fw-bold">Número de Control</label>
                 <input type="text" id="numControl" th:field="*{numControl}" placeholder="Número de control"

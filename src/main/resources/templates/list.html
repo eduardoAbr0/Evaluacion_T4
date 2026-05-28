@@ -7,14 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <!-- JQUERY para desaparecer mensajes-->
-    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             setTimeout(function () {
-                $(".messages").fadeOut(1500);
+                $(".mensaje").fadeOut(1500);
             }, 3000);
         });
     </script>
@@ -85,18 +88,10 @@
 
                                 <div class="panel-body">
 
-                                    <!-- <div class="msj alert alert-primary" role=alert""></div> -->
-
-                                    <ul class="messages list-group mb-3">
-                                        <li {% if message.tags %}
-                                            class="{{ message.tags }} list-group-item list-group-item-success"
-                                            {%endif%}>
-                                            {{ message }}
-                                        </li>
-                                    </ul>
-
-
-
+                                    <!-- Mensajes notificaciones -->
+                                    <div th:if="${mensaje}" class="mensaje" th:classappend="${class}" role="alert">
+                                        <span th:text="${mensaje}"></span>
+                                    </div>
 
                                     <a th:href="@{/showNewAlumnoForm}" class="btn btn-success mt-4 ml-3">AGREGAR</a>
 
@@ -124,10 +119,14 @@
                                                         <td class='v-align-middle' th:text="${alumno.segundoAp}"></td>
 
                                                         <td class='v-align-middle'>
-                                                                <a th:href="@{/showFormForUpdate/{id}(id=${alumno.id})}" class="btn btn-primary btn-sm"> Editar </a>
-                                                                <a th:href="@{/showFormForDetail/{id}(id=${alumno.id})}" class="btn btn-warning btn-sm"> Detalle </a>
+                                                            <a th:href="@{/showFormForUpdate/{id}(id=${alumno.id})}"
+                                                                class="btn btn-primary btn-sm"> Editar </a>
+                                                            <a th:href="@{/showFormForDetail/{id}(id=${alumno.id})}"
+                                                                class="btn btn-warning btn-sm"> Detalle </a>
 
-                                                                <a th:href="@{/deleteAlumno/{id}(id=${alumno.id})}" onclick="confirmarEliminacion()" class="btn btn-danger btn-sm"> Eliminar </a>
+                                                            <a th:href="@{/deleteAlumno/{id}(id=${alumno.id})}"
+                                                                onclick="confirmarEliminacion()"
+                                                                class="btn btn-danger btn-sm"> Eliminar </a>
 
                                                             </form>
                                                         </td>

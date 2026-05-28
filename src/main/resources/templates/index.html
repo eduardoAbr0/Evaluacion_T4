@@ -6,13 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    {% load django_bootstrap5 %}
-    {% bootstrap_css %}
-
-    {% load widget_tweaks %}
-
-    {% load static %}
-
     <!-- JQUERY para desaparecer mensajes-->
     <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
     <script type="text/javascript">
@@ -47,19 +40,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Docentes</a>
                         </li>
-                    </ul>
-
-                    <ul class="navbar-nav ms-auto">
-                        {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <form method="post" action="{% url 'logout' %}" class="d-inline">
-                                {% csrf_token %}
-                                <button class="btn btn-danger fw-bold" type="submit">
-                                    Cerrar sesión
-                                </button>
-                            </form>
-                        </li>
-                        {% endif %}
                     </ul>
 
                 </div>
