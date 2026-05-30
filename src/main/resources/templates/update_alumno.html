@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -14,61 +14,123 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container mt-5">
         <h1>Control de Sistema Escolar</h1>
         <hr>
         <h2>Modificar alumno</h2>
 
-        <form action="#" th:action="@{/saveAlumno}" th:object="${alumno}" method="POST">
-
-            <input type="hidden" th:field="*{id}" />
+        <form id="formEditarAlumno">
 
             <div class="col-4 mb-4">
                 <label for="numControl" class="form-label fw-bold">Número de Control</label>
-                <input type="text" id="numControl" th:field="*{numControl}" placeholder="Número de control"
-                    class="form-control">
+                <input type="text" id="numControl" placeholder="Número de control" class="form-control" required>
             </div>
 
             <div class="col-4 mb-4">
                 <label for="nombre" class="form-label fw-bold">Nombre del Alumno</label>
-                <input type="text" id="nombre" th:field="*{nombre}" placeholder="Nombre de alumno" class="form-control">
+                <input type="text" id="nombre" placeholder="Nombre de alumno" class="form-control" required>
             </div>
 
             <div class="col-4 mb-4">
                 <label for="primerAp" class="form-label fw-bold">Primer Apellido</label>
-                <input type="text" id="primerAp" th:field="*{primerAp}" placeholder="Primer apellido de alumno"
-                    class="form-control">
+                <input type="text" id="primerAp" placeholder="Primer apellido de alumno" class="form-control" required>
             </div>
 
             <div class="col-4 mb-4">
                 <label for="segundoAp" class="form-label fw-bold">Segundo Apellido</label>
-                <input type="text" id="segundoAp" th:field="*{segundoAp}" placeholder="Segundo apellido de alumno"
-                    class="form-control">
+                <input type="text" id="segundoAp" placeholder="Segundo apellido de alumno" class="form-control" required>
             </div>
 
             <div class="col-4 mb-4">
                 <label for="fechaNac" class="form-label fw-bold">Fecha de Nacimiento</label>
-                <input type="text" id="fechaNac" th:field="*{fechaNac}" placeholder="Fecha nacimiento de alumno"
-                    class="form-control">
+                <input type="text" id="fechaNac" placeholder="YYYY-MM-DD" class="form-control" required>
             </div>
 
             <div class="col-4 mb-4">
                 <label for="semestre" class="form-label fw-bold">Semestre</label>
-                <input type="text" id="semestre" th:field="*{semestre}" placeholder="Semestre" class="form-control">
+                <input type="text" id="semestre" placeholder="Semestre" class="form-control" required>
             </div>
 
             <div class="col-4 mb-4">
                 <label for="carrera" class="form-label fw-bold">Carrera</label>
-                <input type="text" id="carrera" th:field="*{carrera}" placeholder="Carrera" class="form-control">
+                <input type="text" id="carrera" placeholder="Carrera" class="form-control" required>
             </div>
 
             <button type="submit" class="btn btn-success col-2 mt-2">Guardar modificaciones</button>
         </form>
 
         <hr>
-
-        <a th:href="@{/}">Volver a inicio</a>
+        <a href="/" class="btn btn-secondary mb-5">Volver a inicio</a>
     </div>
+
+    <script>
+        const token = localStorage.getItem('jwt_token');
+        if (!token) {
+            window.location.href = '/login';
+        }
+        const partesUrl = window.location.pathname.split('/');
+        const alumnoId = partesUrl[partesUrl.length - 1];
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch(`/api/alumnos/${alumnoId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => {
+                if (response.status === 403) throw new Error("No autorizado");
+                if (!response.ok) throw new Error("No se pudo cargar la información");
+                return response.json();
+            })
+            .then(alumno => {
+                document.getElementById('numControl').value = alumno.numControl || '';
+                document.getElementById('nombre').value = alumno.nombre || '';
+                document.getElementById('primerAp').value = alumno.primerAp || '';
+                document.getElementById('segundoAp').value = alumno.segundoAp || '';
+                document.getElementById('fechaNac').value = alumno.fechaNac || '';
+                document.getElementById('semestre').value = alumno.semestre || '';
+                document.getElementById('carrera').value = alumno.carrera || '';
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Error al cargar los datos del alumno.");
+                window.location.href = '/';
+            });
+        });
+
+        document.getElementById('formEditarAlumno').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const alumnoActualizado = {
+                numControl: document.getElementById('numControl').value,
+                nombre: document.getElementById('nombre').value,
+                primerAp: document.getElementById('primerAp').value,
+                segundoAp: document.getElementById('segundoAp').value,
+                fechaNac: document.getElementById('fechaNac').value,
+                semestre: document.getElementById('semestre').value,
+                carrera: document.getElementById('carrera').value
+            };
+
+            fetch(`/api/alumnos/${alumnoId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(alumnoActualizado)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("¡Cambios guardados con éxito!");
+                    window.location.href = '/';
+                } else {
+                    alert("Hubo un problema al actualizar el registro.");
+                }
+            })
+            .catch(error => console.error("Error en la actualización:", error));
+        });
+    </script>
 </body>
 
 </html>

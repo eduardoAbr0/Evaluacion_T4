@@ -1,27 +1,16 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Servicios Escolares - Alumnos</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <!-- JQUERY para desaparecer mensajes-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            setTimeout(function () {
-                $(".mensaje").fadeOut(1500);
-            }, 3000);
-        });
-    </script>
-
 </head>
 
 <body>
@@ -29,14 +18,14 @@
     <header>
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <img src="{% static 'assets/images/estudiantes.png' %}" class="img-fluid">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
+                <img src="/assets/images/estudiantes.png" class="img-fluid" alt="Logo">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07"
                     aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarsExample07">
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="#">INICIO</a>
                         </li>
@@ -47,134 +36,135 @@
                             <a class="nav-link" href="#">Docentes</a>
                         </li>
                     </ul>
-
+                    <button class="btn btn-outline-light ms-auto" onclick="cerrarSesion()">Cerrar Sesión</button>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container mt-5 mb-5">
-
+    <div class="container mt-5 mb-5" style="padding-top: 60px;">
         <div class="row">
-
             <div class="col-md-12">
+                <h1 class="text-center mb-4">SERVICIOS ESCOLARES</h1>
 
-                <h1 style="font-size: 28px; margin-top: 50px;" class=" text-center">SERVICIOS ESCOLARES </h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Inicio</li>
+                        <li class="breadcrumb-item active" aria-current="page">Alumnos</li>
+                    </ol>
+                </nav>
 
-
-
-                <div class="col-md-10">
-
-                    <!-- NVEGACION -->
-
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item" aria-current="page">Inicio</li>
-                            <li class="breadcrumb-item active" aria-current="page">Alumnos</li>
-                        </ol>
-                    </nav>
-
-                    <div class="row">
-
-                        <div class="col-md-12">
-
-                            <div class="content-box-large">
-
-                                <div class="panel-heading">
-                                    <div class="panel-title">
-                                        <h2>Listado de Alumnos</h2>
-                                    </div>
-                                </div>
-
-                                <div class="panel-body">
-
-                                    <!-- Mensajes notificaciones -->
-                                    <div th:if="${mensaje}" class="mensaje" th:classappend="${class}" role="alert">
-                                        <span th:text="${mensaje}"></span>
-                                    </div>
-
-                                    <a th:href="@{/showNewAlumnoForm}" class="btn btn-success mt-4 ml-3">AGREGAR</a>
-
-
-                                    <!-- Cargar los alumnos en una tabla html -->
-                                    <section class="example mt-4">
-                                        <div class="table-responsive" id="tabla_alumnos">
-
-                                            <table class='table table-striped table-bordered table-hover text-center'>
-                                                <thead>
-                                                    <tr>
-                                                        <th> Numero de Control</th>
-                                                        <th> Nombre</th>
-                                                        <th> Primer Ap.</th>
-                                                        <th> Segundo Ap.</th>
-                                                        <th> ACCIONES</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                    <tr th:each="alumno : ${listAlumnos}">
-                                                        <td class='v-align-middle' th:text="${alumno.numControl}"></td>
-                                                        <td class='v-align-middle' th:text="${alumno.nombre}"></td>
-                                                        <td class='v-align-middle' th:text="${alumno.primerAp}"></td>
-                                                        <td class='v-align-middle' th:text="${alumno.segundoAp}"></td>
-
-                                                        <td class='v-align-middle'>
-                                                            <a th:href="@{/showFormForUpdate/{id}(id=${alumno.id})}"
-                                                                class="btn btn-primary btn-sm"> Editar </a>
-                                                            <a th:href="@{/showFormForDetail/{id}(id=${alumno.id})}"
-                                                                class="btn btn-warning btn-sm"> Detalle </a>
-
-                                                            <a th:href="@{/deleteAlumno/{id}(id=${alumno.id})}"
-                                                                onclick="confirmarEliminacion()"
-                                                                class="btn btn-danger btn-sm"> Eliminar </a>
-
-                                                            </form>
-                                                        </td>
-                                                    </tr>
-
-                                                </tbody>
-                                            </table>
-
-
-                                        </div>
-                                    </section>
-                                </div>
-
-                            </div>
-
+                <div class="content-box-large">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <h2>Listado de Alumnos</h2>
                         </div>
-
                     </div>
 
+                    <div class="panel-body">
+                        <a href="/showNewAlumnoForm" class="btn btn-success mt-4">AGREGAR</a>
+
+                        <section class="example mt-4">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>Número de Control</th>
+                                            <th>Nombre</th>
+                                            <th>Primer Ap.</th>
+                                            <th>Segundo Ap.</th>
+                                            <th>ACCIONES</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaAlumnos">
+                                        </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
                 </div>
-
             </div>
-
         </div>
-
-    </div>
-
     </div>
 
     <hr>
     <footer class="text-muted mt-3 mb-3">
-        <div align="center">
+        <div class="text-center">
             FOOTER
         </div>
     </footer>
 
+    <script>
+        const token = localStorage.getItem('jwt_token');
 
-    <!-- Alumnos desde BASE DE DATOS ---------------- -->
-    <script type="text/javascript">
+        if (!token) {
+            window.location.href = '/login';
+        } else {
+            cargarAlumnos();
+        }
 
-        function confirmarEliminacion() {
-            if (confirm("Estas seguro de ELIMINAR el registro?"))
-                return true;
-            else
-                return false;
+        function cargarAlumnos() {
+            fetch('/api/alumnos', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => {
+                if (response.status === 403) {
+                    window.location.href = '/login';
+                    throw new Error("Sesión expirada o no autorizada");
+                }
+                return response.json();
+            })
+            .then(alumnos => {
+                const tbody = document.getElementById('tablaAlumnos');
+                tbody.innerHTML = ''; 
+                
+                alumnos.forEach(alumno => {
+                    const fila = `<tr>
+                        <td class="align-middle">${alumno.numControl}</td>
+                        <td class="align-middle">${alumno.nombre}</td>
+                        <td class="align-middle">${alumno.primerAp}</td>
+                        <td class="align-middle">${alumno.segundoAp}</td>
+                        <td class="align-middle">
+                            <a href="/showFormForUpdate/${alumno.id}" class="btn btn-primary btn-sm">Editar</a>
+                            <a href="/showFormForDetail/${alumno.id}" class="btn btn-warning btn-sm">Detalle</a>
+                            
+                            <button onclick="eliminarAlumno(${alumno.id})" class="btn btn-danger btn-sm">Eliminar</button>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += fila;
+                });
+            })
+            .catch(err => console.error("Error:", err));
+        }
+
+        function eliminarAlumno(id) {
+            if (confirm("¿Estás seguro de ELIMINAR el registro?")) {
+                
+                fetch(`/api/alumnos/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Alumno eliminado correctamente");
+                        cargarAlumnos();
+                    } else {
+                        alert("Error al intentar eliminar el alumno");
+                    }
+                })
+                .catch(err => console.error("Error en la eliminación:", err));
+            }
+        }
+        
+        function cerrarSesion() {
+            localStorage.removeItem('jwt_token');
+            window.location.href = '/login';
         }
     </script>
-
 </body>
-
 </html>

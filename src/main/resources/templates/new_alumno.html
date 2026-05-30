@@ -1,42 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Agregar Alumno</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div class="container">
+    <div class="container mt-4">
         <h1>Control de Sistema Escolar</h1>
         <hr>
-        <h2>Alumnos</h2>
+        <h2>Agregar Alumno</h2>
 
-        <form action="#" th:action="@{/saveAlumno}" th:object="${alumno}" method="POST">
-            <input type="text" th:field="*{numControl}" placeholder="Numero de control"class="form-control mb-4 col-4">
+        <form id="formAgregarAlumno" class="mt-4">
+            
+            <input type="text" id="numControl" placeholder="Número de control" class="form-control mb-4 col-4" required>
 
-            <input type="text" th:field="*{nombre}" placeholder="Nombre de alumno" class="form-control mb-4 col-4">
+            <input type="text" id="nombre" placeholder="Nombre de alumno" class="form-control mb-4 col-4" required>
 
-            <input type="text" th:field="*{primerAp}" placeholder="Primer apellido de alumno" class="form-control mb-4 col-4">
+            <input type="text" id="primerAp" placeholder="Primer apellido de alumno" class="form-control mb-4 col-4" required>
 
-            <input type="text" th:field="*{segundoAp}" placeholder="Segundo apellido de alumno" class="form-control mb-4 col-4">
+            <input type="text" id="segundoAp" placeholder="Segundo apellido de alumno" class="form-control mb-4 col-4" required>
 
-            <input type="text" th:field="*{fechaNac}" placeholder="Fecha nacimiento de alumno" class="form-control mb-4 col-4">
+            <input type="date" id="fechaNac" placeholder="Fecha nacimiento de alumno" class="form-control mb-4 col-4" required>
 
-            <input type="text" th:field="*{semestre}" placeholder="Semestre" class="form-control mb-4 col-4">
+            <input type="text" id="semestre" placeholder="Semestre" class="form-control mb-4 col-4" required>
 
-            <input type="text" th:field="*{carrera}" placeholder="Carrera" class="form-control mb-4 col-4">
+            <input type="text" id="carrera" placeholder="Carrera" class="form-control mb-4 col-4" required>
 
-            <button type="submit" class="btn btn-info col-2"> Guardar alumno</button>
+            <button type="submit" class="btn btn-info col-2">Guardar alumno</button>
         </form>
 
         <hr>
 
-        <a th:href="@{/}">Volver a inicio</a>
+        <a href="/">Volver a inicio</a>
     </div>
+
+    <script>
+        const token = localStorage.getItem('jwt_token');
+        if (!token) {
+            window.location.href = '/login';
+        }
+
+        document.getElementById('formAgregarAlumno').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+
+            const nuevoAlumno = {
+                numControl: document.getElementById('numControl').value,
+                nombre: document.getElementById('nombre').value,
+                primerAp: document.getElementById('primerAp').value,
+                segundoAp: document.getElementById('segundoAp').value,
+                fechaNac: document.getElementById('fechaNac').value,
+                semestre: document.getElementById('semestre').value,
+                carrera: document.getElementById('carrera').value
+            };
+
+            fetch('/api/alumnos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token 
+                },
+                body: JSON.stringify(nuevoAlumno)
+            })
+            .then(response => {
+                if (response.status === 403) {
+                    alert("Tu sesión ha expirado o no tienes permisos.");
+                    window.location.href = '/login';
+                    throw new Error("No autorizado");
+                }
+                
+                if (response.ok) {
+                    alert("Alumno guardado con éxito");
+                    window.location.href = '/'; 
+                } else {
+                    alert("Error al intentar guardar el alumno. Verifica los datos.");
+                }
+            })
+            .catch(error => console.error("Error en la petición:", error));
+        });
+    </script>
 </body>
 
 </html>
